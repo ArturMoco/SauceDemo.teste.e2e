@@ -1,0 +1,29 @@
+{
+  "name": "saucedemo.teste.e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cypress.config.js",
+  "scripts": {
+    "test": "cypress run",
+    "allure:generate": "allure generate ./allure-results --clean -o ./allure-report",
+    "allure:open": "allure open ./allure-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cypress/code-coverage": "^3.14.5",
+    "@faker-js/faker": "^9.9.0",
+    "@shelex/cypress-allure-plugin": "^2.41.2",
+    "allure-commandline": "^2.34.1",
+    "babel-plugin-istanbul": "^7.0.0",
+    "cypress": "^13.7.3",
+    "cypress-dotenv": "^3.0.1",
+    "dotenv": "^17.2.0",
+    "istanbul-lib-coverage": "^3.2.2",
+    "nyc": "^17.1.0"
+  }
+}
+// This file is part of the Cypress project configuration.
+// It defines the project metadata, scripts, and dependencies required for running tests and generating reports.
+// The scripts include commands for running tests, generating Allure reports, and opening the report viewer.
