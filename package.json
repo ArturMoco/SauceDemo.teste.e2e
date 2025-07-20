@@ -24,6 +24,3 @@
     "nyc": "^17.1.0"
   }
 }
-// This file is part of the Cypress project configuration.
-// It defines the project metadata, scripts, and dependencies required for running tests and generating reports.
-// The scripts include commands for running tests, generating Allure reports, and opening the report viewer.
