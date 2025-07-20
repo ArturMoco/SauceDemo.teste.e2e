@@ -7,34 +7,36 @@ pipeline {
   }
 
   stages {
-    stage('Checkout Code') {
-      steps {
-        git 'https://github.com/ArturMoco/SauceDemo.teste.e2e.git'
-      }
-    }
-
     stage('Install Dependencies') {
       steps {
-        sh 'npm install'
+        dir('SauceDemo.teste.e2e') {
+          bat 'npm install'
+        }
       }
     }
 
     stage('Run Cypress Tests') {
       steps {
-        sh 'npm run test'
+        dir('SauceDemo.teste.e2e') {
+          bat 'npm run test'
+        }
       }
     }
 
     stage('Generate Allure Report') {
       steps {
-        sh 'npm run allure:generate'
+        dir('SauceDemo.teste.e2e') {
+          bat 'npm run allure:generate'
+        }
       }
     }
 
     stage('Publish Allure Report') {
       steps {
-        allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-        archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
+        dir('SauceDemo.teste.e2e') {
+          allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+          archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
+        }
       }
     }
   }
@@ -42,28 +44,32 @@ pipeline {
   post {
     success {
       script {
-        def message = "*✅ Testes SauceDemo finalizados com sucesso!* 🚀\n" +
-                      "> Projeto: SauceDemo\n" +
-                      "> Build: #${env.BUILD_NUMBER}\n" +
+        def message = "*✅ SauceDemo tests completed successfully!* 🚀`n" +
+                      "> Project: SauceDemo`n" +
+                      "> Build: #${env.BUILD_NUMBER}`n" +
                       "> Allure Report: ${env.BUILD_URL}allure/"
-        sh """
-          curl -X POST -H 'Content-type: application/json' \\
-          --data '{ "text": "${message}" }' \\
-          "${SLACK_WEBHOOK}"
+        bat """
+          powershell -Command ^
+          Invoke-RestMethod -Uri '${SLACK_WEBHOOK}' ^
+          -Method Post ^
+          -Body (@{ text = '${message}' } | ConvertTo-Json -Compress) ^
+          -ContentType 'application/json'
         """
       }
     }
 
     failure {
       script {
-        def message = "*❌ Falha nos testes SauceDemo!* ⚠️\n" +
-                      "> Projeto: SauceDemo\n" +
-                      "> Build: #${env.BUILD_NUMBER}\n" +
+        def message = "*❌ SauceDemo tests failed!* ⚠️`n" +
+                      "> Project: SauceDemo`n" +
+                      "> Build: #${env.BUILD_NUMBER}`n" +
                       "> Allure Report: ${env.BUILD_URL}allure/"
-        sh """
-          curl -X POST -H 'Content-type: application/json' \\
-          --data '{ "text": "${message}" }' \\
-          "${SLACK_WEBHOOK}"
+        bat """
+          powershell -Command ^
+          Invoke-RestMethod -Uri '${SLACK_WEBHOOK}' ^
+          -Method Post ^
+          -Body (@{ text = '${message}' } | ConvertTo-Json -Compress) ^
+          -ContentType 'application/json'
         """
       }
     }
