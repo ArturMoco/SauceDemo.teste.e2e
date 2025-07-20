@@ -13,7 +13,7 @@ cypress/videos/
 # ✅ Allure results
 allure-results/
 allure-report/
-*.json
+
 
 # ✅ Environment files
 .env*
