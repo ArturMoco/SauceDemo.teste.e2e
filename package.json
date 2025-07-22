@@ -17,7 +17,7 @@
     "@shelex/cypress-allure-plugin": "^2.41.2",
     "allure-commandline": "^2.34.1",
     "babel-plugin-istanbul": "^7.0.0",
-    "cypress": "^13.7.3",
+    "cypress": "^14.5.2",
     "cypress-dotenv": "^3.0.1",
     "dotenv": "^17.2.0",
     "istanbul-lib-coverage": "^3.2.2",
