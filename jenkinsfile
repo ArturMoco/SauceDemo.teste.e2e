@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     CI = 'true'
-    SLACK_WEBHOOK = credentials('SLACK_WEBHOOK')
+    SLACK_WEBHOOK = credentials('SLACK_WEBHOOK') // Set in Jenkins > Credentials
   }
 
   stages {
@@ -44,32 +44,24 @@ pipeline {
   post {
     success {
       script {
-        def message = "*✅ SauceDemo tests completed successfully!* 🚀`n" +
-                      "> Project: SauceDemo`n" +
-                      "> Build: #${env.BUILD_NUMBER}`n" +
-                      "> Allure Report: ${env.BUILD_URL}allure/"
         bat """
           powershell -Command ^
-          Invoke-RestMethod -Uri '${SLACK_WEBHOOK}' ^
+          Invoke-RestMethod -Uri "${SLACK_WEBHOOK}" ^
           -Method Post ^
-          -Body (@{ text = '${message}' } | ConvertTo-Json -Compress) ^
-          -ContentType 'application/json'
+          -Body (@{ text = "✅ SauceDemo tests passed! Build #${env.BUILD_NUMBER} was successful. 🚀" } | ConvertTo-Json -Compress) ^
+          -ContentType "application/json"
         """
       }
     }
 
     failure {
       script {
-        def message = "*❌ SauceDemo tests failed!* ⚠️`n" +
-                      "> Project: SauceDemo`n" +
-                      "> Build: #${env.BUILD_NUMBER}`n" +
-                      "> Allure Report: ${env.BUILD_URL}allure/"
         bat """
           powershell -Command ^
-          Invoke-RestMethod -Uri '${SLACK_WEBHOOK}' ^
+          Invoke-RestMethod -Uri "${SLACK_WEBHOOK}" ^
           -Method Post ^
-          -Body (@{ text = '${message}' } | ConvertTo-Json -Compress) ^
-          -ContentType 'application/json'
+          -Body (@{ text = "❌ SauceDemo tests failed! Build #${env.BUILD_NUMBER} needs attention. ⚠️" } | ConvertTo-Json -Compress) ^
+          -ContentType "application/json"
         """
       }
     }
