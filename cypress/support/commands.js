@@ -38,4 +38,23 @@ Cypress.Commands.add('fillRandomCheckoutForm', () => {
   cy.get('[data-test=postalCode]').scrollIntoView().type(postalCode);
 });
 
+Cypress.Commands.add('logout', () => {
+  cy.get('#react-burger-menu-btn').click();
+
+  const isHeadless = Cypress.browser.isHeadless;
+
+  if (isHeadless) {
+    cy.get('#logout_sidebar_link', { timeout: 8000 })
+      .should('exist')
+      .click({ force: true });
+  } else {
+    cy.get('#logout_sidebar_link', { timeout: 8000 })
+      .should('be.visible')
+      .click();
+  }
+
+  cy.url().should('eq', Cypress.config('baseUrl') + '/');
+  cy.get('[data-test=login-button]').should('be.visible');
+  cy.screenshot('logout-success');
+});
 
